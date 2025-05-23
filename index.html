@@ -110,6 +110,11 @@
         </div>
 
         <div class="form-group">
+            <label for="numEmojisToAdd">追加する絵文字の数 (URLが少ない場合、繰り返し利用):</label>
+            <input type="number" id="numEmojisToAdd" value="1" min="1">
+        </div>
+
+        <div class="form-group">
             <label for="delay">絵文字追加間の待機時間 (秒):</label>
             <input type="number" id="delay" value="1" min="0">
         </div>
@@ -124,7 +129,6 @@
     </div>
 
     <script>
-        // あなたのJavaScriptコードをここに貼り付けます
         // ログ出力関数
         function log(message, type = 'info') {
             const logElement = document.getElementById('log');
@@ -160,6 +164,8 @@
             const emojiNamesInput = document.getElementById('emojiNames').value.trim();
             const emojiUrlsInput = document.getElementById('emojiUrls').value.trim();
             const delaySeconds = parseInt(document.getElementById('delay').value, 10);
+            const numEmojisToAdd = parseInt(document.getElementById('numEmojisToAdd').value, 10); // 新しく追加
+
             const delay = delaySeconds * 1000; // ミリ秒に変換
 
             if (!token || !guildId || !emojiUrlsInput) {
@@ -168,28 +174,31 @@
             }
 
             const emojiNames = emojiNamesInput.split(',').map(name => name.trim()).filter(name => name !== '');
-            const emojiUrls = emojiUrlsInput.split(',').map(url => url.trim()).filter(url => url !== '');
+            const originalEmojiUrls = emojiUrlsInput.split(',').map(url => url.trim()).filter(url => url !== '');
 
-            if (emojiUrls.length === 0) {
+            if (originalEmojiUrls.length === 0) {
                 log('エラー: 追加する絵文字URLがありません。', 'error');
                 return;
             }
 
-            if (!useGeneratedNames && emojiNames.length > 0 && emojiNames.length !== emojiUrls.length) {
-                log('エラー: 絵文字名と画像URLの数が一致しません。', 'error');
-                return;
+            // 指定されたURLの数よりも追加する絵文字の数が多い場合、警告を出す
+            if (numEmojisToAdd > originalEmojiUrls.length && !useGeneratedNames) {
+                log('警告: 指定した絵文字の数（' + numEmojisToAdd + '）が提供されたURLの数（' + originalEmojiUrls.length + '）より多いです。名前を指定する場合は、URLの数と一致させる必要があります。自動生成名を使用するか、URLの数を増やすことを検討してください。', 'warn');
+                // この場合、名前指定モードでは処理を中断するか、提供されたURLの数に合わせるなどの対応が必要です。
+                // 今回は、名前指定モードでも提供されたURLの数でループし、名前もそれに合わせることにします。
             }
+
 
             log('絵文字の追加を開始します...');
 
-            for (let i = 0; i < emojiUrls.length; i++) {
-                const url = emojiUrls[i];
+            for (let i = 0; i < numEmojisToAdd; i++) { // ここをnumEmojisToAddでループ
+                const url = originalEmojiUrls[i % originalEmojiUrls.length]; // URLを循環利用
                 let name;
 
                 if (useGeneratedNames) {
                     name = `emoji_${Date.now()}_${i}`; // 自動生成名
                 } else if (emojiNames.length > 0) {
-                    name = emojiNames[i];
+                    name = emojiNames[i % emojiNames.length]; // 名前も循環利用
                 } else {
                      // 名前指定なしで、かつuseGeneratedNamesがfalseの場合 (通常はありえないが念のため)
                     name = `emoji_${Date.now()}_${i}`;
@@ -248,7 +257,7 @@
                 }
 
                 // 最後の絵文字でなければ待機
-                if (i < emojiUrls.length - 1) {
+                if (i < numEmojisToAdd - 1) { // ループ回数で判定
                     log(`${delaySeconds}秒間待機します...`);
                     await new Promise(resolve => setTimeout(resolve, delay));
                 }
