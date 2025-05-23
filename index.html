@@ -1,91 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>emoji</title>
+    <meta name="description" content="emojiツール">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="blue">
+    <meta property="og:title" content="emoji">
+    <meta property="og:description" content="emojiツールです">
+    <meta property="og:image" content="https://i.imgur.com/JTkB9AC.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 <br>
-<br>
-<style>
-body {
-font-family: 'Noto Sans JP', sans-serif;
-background-color: #36393f; /* Discordの背景色に似た色 /
-color: #dcddde; / Discordの文字色に似た色 /
-margin: 20px;
-padding: 0;
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-h1 {
-color: #ffffff;
-margin-bottom: 20px;
-}
-form {
-background-color: #2f3136; / Discordの要素の背景色に似た色 /
-padding: 30px;
-border-radius: 8px;
-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-width: 100%;
-max-width: 500px;
-box-sizing: border-box;
-}
-label {
-display: block;
-margin-bottom: 8px;
-color: #b9bbbe; / Discordのラベル色に似た色 /
-font-weight: bold;
-}
-input[type="text"] {
-width: calc(100% - 20px);
-padding: 10px;
-margin-bottom: 15px;
-border: 1px solid #202225; / Discordの入力欄のボーダー色に似た色 /
-border-radius: 4px;
-background-color: #202225; / Discordの入力欄の背景色に似た色 /
-color: #dcddde;
-font-size: 16px;
-}
-button {
-background-color: #5865f2; / Discordのプライマリボタンの色 /
-color: white;
-padding: 12px 20px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 16px;
-font-weight: bold;
-transition: background-color 0.2s ease;
-margin-right: 10px;
-}
-button:hover {
-background-color: #4752c4; / ホバー時の色 /
-}
-p {
-color: #b9bbbe;
-margin-bottom: 20px;
-text-align: center;
-}
-/ 不要な要素を非表示にするためのCSS */
-a, #shareLink, #status, .donate-info, button[onclick="addEmojisWithoutNames()"], button[onclick="copyShareLink()"], button[onclick="generateShareLink()"], button[onclick="readFromTemplateLink()"] {
-display: none !important;
-}
-</style>
-<script>
-function addEmojis() {
-const token = document.getElementById('token').value;
-const guildId = document.getElementById('guildId').value;
-const emojiNames = document.getElementById('emojiNames').value.split(',').map(name => name.trim()).filter(name => name !== '');
-const emojiUrls = document.getElementById('emojiUrls').value.split(',').map(url => url.trim()).filter(url => url !== '');
-    if (!token || !guildId || emojiUrls.length === 0) {
-        alert(&#39;トークン、サーバーID、絵文字URLは必須です。&#39;);
-        return;
-    }
-
-    if (emojiNames.length &gt; 0 &amp;&amp; emojiNames.length !== emojiUrls.length) {
-        alert(&#39;絵文字の名前とURLの数が一致しません。&#39;);
-        return;
-    }
-
-    // ここに絵文字追加のロジックを記述します。
-    // 実際にはDiscord APIへのリクエストが必要になりますが、
-    // このコードはUIの変更のみに焦点を当てているため、
-    // 実装は省略しています。
-    alert(&#39;絵文字を追加する機能は現在開発中です。&#39;);
-}
-
-</script>
+    <h1>emoji add tool</h1>
+    </p>
+    <form id="emojiForm">
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token" required>
+        <br><br>
+        <label for="guildId">サーバーID (Guild ID):</label>
+        <input type="text" id="guildId" name="guildId" required>
+        <br><br>
+        <label for="emojiNames">絵文字名 (英数字/_):</label>
+        <input type="text" id="emojiNames" name="emojiNames">
+        <br>
+        <label for="emojiUrls">絵文字URL (PNG/JPG/GIF):</label>
+        <input type="text" id="emojiUrls" name="emojiUrls" required>
+        <br><br>
+        <button type="button" onclick="addEmojis()">絵文字を追加(1個/20秒)</button>
+        <button type="button" onclick="addEmojisWithoutNames()">名前指定なしで追加</button>
+        <br>
+    </form>
+    <br><br>
+    <script src="script.js"></script>
+</body>
+</html>
