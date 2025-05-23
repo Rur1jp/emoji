@@ -1,39 +1,118 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>emoji</title>
-    <meta name="description" content="emojiツール">
+    <title>Discord Emoji Uploader</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="blue">
-    <meta property="og:title" content="emoji">
-    <meta property="og:description" content="emojiツールです">
-    <meta property="og:image" content="https://i.imgur.com/JTkB9AC.png">
-    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#5865F2">
+    <style>
+        body {
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #36393F; /* Discord dark background */
+            color: #DCDDDE; /* Discord light gray text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #2F3136; /* Discord deeper dark background for content */
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #FFFFFF;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #B9BBBE; /* Discord lighter gray for labels */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #202225; /* Darker border */
+            border-radius: 4px;
+            background-color: #202225; /* Input field background */
+            color: #DCDDDE;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #5865F2; /* Discord blue focus */
+            box-shadow: 0 0 0 1px #5865F2;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5865F2; /* Discord blue button */
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #4752C4; /* Darker blue on hover */
+        }
+
+        .log-container {
+            margin-top: 25px;
+        }
+
+        #log {
+            width: calc(100% - 20px);
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #202225;
+            border-radius: 4px;
+            background-color: #202225;
+            color: #DCDDDE;
+            font-family: 'Consolas', 'Monaco', monospace; /* Monospaced font for logs */
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-<br>
-    <h1>emoji add tool</h1>
-    </p>
-    <form id="emojiForm">
-        <label for="token">Token:</label>
-        <input type="text" id="token" name="token" required>
-        <br><br>
-        <label for="guildId">サーバーID (Guild ID):</label>
-        <input type="text" id="guildId" name="guildId" required>
-        <br><br>
-        <label for="emojiNames">絵文字名 (英数字/_):</label>
-        <input type="text" id="emojiNames" name="emojiNames">
-        <br>
-        <label for="emojiUrls">絵文字URL (PNG/JPG/GIF):</label>
-        <input type="text" id="emojiUrls" name="emojiUrls" required>
-        <br><br>
-        <button type="button" onclick="addEmojis()">絵文字を追加(1個/20秒)</button>
-        <button type="button" onclick="addEmojisWithoutNames()">名前指定なしで追加</button>
-        <br>
-    </form>
-    <br><br>
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="container">
+        <h1>Discord Emoji Uploader</h1>
+        <form id="emojiForm">
+            <div class="form-group">
+                <label for="token">Token:</label>
+                <input type="password"
